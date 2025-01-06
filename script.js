@@ -4,7 +4,6 @@ const participantes = {};
 const partidas = [];
 const passwordCorrecta = "trucoargento";
 let partidaEditando = null; // Variable para rastrear la partida que se está editando
-let partidaAEliminar = null; // Variable para rastrear la partida que se está intentando eliminar
 
 function mostrarVista(vista) {
     const vistas = document.querySelectorAll('.vista');
@@ -284,7 +283,7 @@ function actualizarTablaPartidas() {
             <td>${partida.puntosEquipo2}</td>
             <td>
                 <button onclick="editarPartida(${index})">Editar</button>
-                <button onclick="solicitarPasswordParaEliminar(${index})">Eliminar</button>
+                <button onclick="eliminarPartida(${index})">Eliminar</button>
             </td>
         </tr>`;
         tbody.innerHTML += fila;
