@@ -201,7 +201,7 @@
             </div>
         </main>
 
-        <!-- Dialogo de contraseña para gestionar jugadores -->
+        <!-- Dialogo de contraseña -->
         <div id="passwordDialog" class="password-dialog">
             <div class="password-content">
                 <h3>Ingrese la contraseña</h3>
@@ -209,19 +209,13 @@
                 <button onclick="verificarPassword()">Ingresar</button>
                 <button onclick="ocultarDialogo()">Volver</button>
                 <p id="passwordError" class="error-message" style="display:none;">Contraseña incorrecta</p>
+                <p class="mensaje">que miras puto</p>
             </div>
         </div>
-
-        <!-- Dialogo de contraseña para eliminar partida -->
-        <div id="passwordDialogEliminar" class="password-dialog">
-            <div class="password-content">
-                <h3>Ingrese la contraseña para eliminar la partida</h3>
-                <input type="password" id="passwordInputEliminar" placeholder="Contraseña">
-                <button onclick="verificarPasswordEliminar()">Eliminar</button>
-                <button onclick="ocultarDialogoEliminar()">Cancelar</button>
-                <p id="passwordErrorEliminar" class="error-message" style="display:none;">Contraseña incorrecta</p>
-            </div>
-        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
     </div>
     <script src="script.js"></script>
 </body>
