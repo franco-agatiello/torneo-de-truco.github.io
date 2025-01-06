@@ -1,4 +1,4 @@
-const jugadoresRegistrados =['Fede','Nico', 'Tobi', 'Ernes','Santi','Caño', 'Colo','Mati', 'Jero','Vega']
+const jugadoresRegistrados = ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
 
 const participantes = {};
 const partidas = [];
@@ -11,6 +11,7 @@ function mostrarVista(vista) {
 
     if (vista === 'torneo') {
         document.getElementById('vistaTorneo').classList.add('active');
+        actualizarTabla();
     } else if (vista === 'registroPartidas') {
         document.getElementById('vistaRegistroPartidas').classList.add('active');
         actualizarTablaPartidas();
@@ -18,10 +19,10 @@ function mostrarVista(vista) {
         document.getElementById('passwordDialog').style.display = 'block';
     } else if (vista === 'reglamento') {
         document.getElementById('vistaReglamento').classList.add('active');
+    } else if (vista === 'nuevaPartida') {
+        document.getElementById('vistaNuevaPartida').classList.add('active');
     }
 }
-
-
 
 function verificarPassword() {
     const inputPassword = document.getElementById('passwordInput').value;
@@ -117,9 +118,7 @@ function eliminarJugador(jugador) {
         actualizarListaJugadores();
         cambiarFormulario();
     }
-}
-
-function registrarPartida() {
+}function registrarPartida() {
     const tipoPartida = document.getElementById('tipoPartida').value;
     const lugar = document.getElementById('lugar').value.trim();
     const fecha = document.getElementById('fecha').value;
@@ -299,7 +298,7 @@ function editarPartida(index) {
     document.getElementById('lugar').value = partida.lugar;
     document.getElementById('fecha').value = partida.fecha;
 
-    mostrarVista('torneo');
+    mostrarVista('nuevaPartida');
 }
 
 function eliminarPartida(index) {
