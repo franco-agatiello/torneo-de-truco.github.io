@@ -217,7 +217,7 @@ table tbody tr:nth-child(even) {
 
     /* Ajustes específicos para el reglamento */
     #vistaReglamento h2 {
-        font-size: 1.2em;
+        font-size: 0.5em;
     }
 
     #vistaReglamento p, #vistaReglamento ul, #vistaReglamento table {
