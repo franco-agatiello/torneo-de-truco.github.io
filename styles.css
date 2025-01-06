@@ -1,8 +1,9 @@
+/* Estilos generales */
 body {
     font-family: 'Arial', sans-serif;
     margin: 20px;
     background-color: #114430;
-    background-image: url('background.png'); /* Agrega una imagen de fondo */
+    background-image: url('background.png');
     background-size: cover;
     background-position: center;
 }
@@ -16,7 +17,7 @@ h1 {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
+    background: rgba(255, 255, 255, 0.8);
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -30,6 +31,7 @@ header .header-content {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 header .logo {
@@ -41,12 +43,13 @@ header .logo {
 nav {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     margin-bottom: 20px;
 }
 
 nav button {
     padding: 10px 20px;
-    margin: 0 10px;
+    margin: 5px;
     font-size: 16px;
     cursor: pointer;
     background-color: #6ba53e;
@@ -57,7 +60,7 @@ nav button {
 }
 
 nav button:hover {
-    background-color: #6ba53e;
+    background-color: #5a9234;
 }
 
 .vista {
@@ -73,7 +76,7 @@ table {
     border-collapse: collapse;
     margin-top: 20px;
     background-color: white;
-    color: #333; /* Color del texto de las tablas */
+    color: #333;
 }
 
 th, td {
@@ -84,17 +87,18 @@ th, td {
 
 th {
     background-color: #042d29;
-    color: white; /* Color del texto de los encabezados */
+    color: white;
 }
 
 td {
-    color: #333; /* Color del texto de las celdas */
+    color: #333;
 }
 
 .input-row {
     display: flex;
     gap: 10px;
     margin-top: 20px;
+    flex-wrap: wrap;
 }
 
 .input-row input, .input-row button, .input-row select {
@@ -102,6 +106,7 @@ td {
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    flex: 1 1 100%;
 }
 
 .jugador-row {
@@ -129,7 +134,7 @@ td {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 300px; /* Hacer el cuadro más pequeño */
+    width: 300px;
 }
 
 .password-content h3 {
@@ -149,7 +154,7 @@ td {
 }
 
 .password-content button:hover {
-    background-color: #6ba53e;
+    background-color: #5a9234;
 }
 
 .error-message {
@@ -166,7 +171,7 @@ td {
 /* Estilos adicionales para mejorar la presentación */
 table thead {
     background-color: #6ba53e;
-    color: white; /* Color del texto de los encabezados */
+    color: white;
 }
 
 table tbody tr:nth-child(odd) {
@@ -176,3 +181,55 @@ table tbody tr:nth-child(odd) {
 table tbody tr:nth-child(even) {
     background-color: #e8e8e8;
 }
+
+/* Media Queries para pantallas pequeñas */
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    header .header-content {
+        flex-direction: column;
+    }
+
+    header .logo {
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+
+    nav {
+        flex-direction: column;
+    }
+
+    nav button {
+        margin: 10px 0;
+        width: 100%;
+    }
+
+    .input-row input, .input-row button, .input-row select {
+        flex: 1 1 auto;
+    }
+
+    table th, table td {
+        padding: 5px;
+    }
+
+    /* Ajustes específicos para el reglamento */
+    #vistaReglamento h2 {
+        font-size: 1.5em;
+    }
+
+    #vistaReglamento p, #vistaReglamento ul, #vistaReglamento table {
+        font-size: 0.9em;
+        margin: 5px 0;
+    }
+
+    #vistaReglamento table th, #vistaReglamento table td {
+        padding: 5px;
+    }
+
+    #vistaReglamento ul {
+        padding-left: 20px;
+    }
+} 
