@@ -217,17 +217,22 @@ table tbody tr:nth-child(even) {
 
     /* Ajustes específicos para el reglamento */
     #vistaReglamento h2 {
-        font-size: 1.5em;
+        font-size: 1.2em; /* Ajuste del tamaño de la fuente */
     }
 
     #vistaReglamento p, #vistaReglamento ul, #vistaReglamento table {
-        font-size: 0.9em;
+        font-size: 0.8em; /* Ajuste del tamaño de la fuente */
         margin: 5px 0;
     }
 
     #vistaReglamento table th, #vistaReglamento table td {
         padding: 5px;
     }
+
+    #vistaReglamento ul {
+        padding-left: 20px;
+    }
+}
 
     #vistaReglamento ul {
         padding-left: 20px;
