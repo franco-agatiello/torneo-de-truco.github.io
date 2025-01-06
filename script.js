@@ -1,5 +1,6 @@
-const jugadoresRegistrados = ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
+// script.js
 
+const jugadoresRegistrados = ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
 const participantes = {};
 const partidas = [];
 const passwordCorrecta = "trucoargento";
@@ -118,7 +119,8 @@ function eliminarJugador(jugador) {
         actualizarListaJugadores();
         cambiarFormulario();
     }
-}function registrarPartida() {
+}
+function registrarPartida() {
     const tipoPartida = document.getElementById('tipoPartida').value;
     const lugar = document.getElementById('lugar').value.trim();
     const fecha = document.getElementById('fecha').value;
@@ -274,7 +276,7 @@ function actualizarTablaPartidas() {
             <td>${partida.puntosEquipo2}</td>
             <td>
                 <button onclick="editarPartida(${index})">Editar</button>
-                <button onclick="eliminarPartida(${index})">Eliminar</button>
+                <button onclick="mostrarDialogoEliminar(${index})">Eliminar</button>
             </td>
         </tr>`;
         tbody.innerHTML += fila;
@@ -299,6 +301,15 @@ function editarPartida(index) {
     document.getElementById('fecha').value = partida.fecha;
 
     mostrarVista('nuevaPartida');
+}
+
+function mostrarDialogoEliminar(index) {
+    const password = prompt("Ingrese la contraseña para eliminar la partida:");
+    if (password === passwordCorrecta) {
+        eliminarPartida(index);
+    } else {
+        alert("Contraseña incorrecta. No se puede eliminar la partida.");
+    }
 }
 
 function eliminarPartida(index) {

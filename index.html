@@ -212,10 +212,17 @@
                 <p class="mensaje">que miras puto</p>
             </div>
         </div>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
+
+        <!-- Dialogo de contraseña para eliminación -->
+        <div id="deletePasswordDialog" class="password-dialog">
+            <div class="password-content">
+                <h3>Ingrese la contraseña para eliminar</h3>
+                <input type="password" id="deletePasswordInput" placeholder="Contraseña">
+                <button onclick="verificarPasswordEliminar()">Eliminar</button>
+                <button onclick="ocultarDialogoEliminar()">Volver</button>
+                <p id="deletePasswordError" class="error-message" style="display:none;">Contraseña incorrecta</p>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

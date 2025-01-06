@@ -1,3 +1,5 @@
+/* styles.css */
+
 /* Estilos generales */
 body {
     font-family: 'Arial', sans-serif;
@@ -232,4 +234,4 @@ table tbody tr:nth-child(even) {
     #vistaReglamento ul {
         padding-left: 20px;
     }
-} 
+}
