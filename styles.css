@@ -214,4 +214,22 @@ table tbody tr:nth-child(even) {
     table th, table td {
         padding: 5px;
     }
+
+    /* Ajustes específicos para el reglamento */
+    #vistaReglamento h2 {
+        font-size: 1.5em;
+    }
+
+    #vistaReglamento p, #vistaReglamento ul, #vistaReglamento table {
+        font-size: 0.9em;
+        margin: 5px 0;
+    }
+
+    #vistaReglamento table th, #vistaReglamento table td {
+        padding: 5px;
+    }
+
+    #vistaReglamento ul {
+        padding-left: 20px;
+    }
 }
