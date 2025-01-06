@@ -4,6 +4,7 @@ const participantes = {};
 const partidas = [];
 const passwordCorrecta = "trucoargento";
 let partidaEditando = null; // Variable para rastrear la partida que se está editando
+let partidaAEliminar = null; // Variable para rastrear la partida que se está eliminando
 
 function mostrarVista(vista) {
     const vistas = document.querySelectorAll('.vista');
@@ -23,7 +24,6 @@ function mostrarVista(vista) {
         document.getElementById('vistaNuevaPartida').classList.add('active');
     }
 }
-
 function verificarPassword() {
     const inputPassword = document.getElementById('passwordInput').value;
     if (inputPassword === passwordCorrecta) {
@@ -38,6 +38,33 @@ function verificarPassword() {
 function ocultarDialogo() {
     document.getElementById('passwordDialog').style.display = 'none';
     mostrarVista('torneo'); // Vuelve a la vista principal
+}
+
+function verificarPasswordEliminar() {
+    const inputPassword = document.getElementById('passwordInputEliminar').value;
+    if (inputPassword === passwordCorrecta) {
+        document.getElementById('passwordDialogEliminar').style.display = 'none';
+        eliminarPartidaConfirmada(partidaAEliminar);
+    } else {
+        document.getElementById('passwordErrorEliminar').style.display = 'block';
+    }
+}
+
+function ocultarDialogoEliminar() {
+    document.getElementById('passwordDialogEliminar').style.display = 'none';
+}
+
+function eliminarPartida(index) {
+    partidaAEliminar = index;
+    document.getElementById('passwordDialogEliminar').style.display = 'block';
+}
+function eliminarPartidaConfirmada(index) {
+    const partida = partidas[index];
+    actualizarEstadisticas(partida.equipo1, partida.puntosEquipo1, partida.puntosEquipo1 > partida.puntosEquipo2, false);
+    actualizarEstadisticas(partida.equipo2, partida.puntosEquipo2, partida.puntosEquipo2 > partida.puntosEquipo1, false);
+    partidas.splice(index, 1);
+    actualizarTabla();
+    actualizarTablaPartidas();
 }
 
 function actualizarListaJugadores() {
@@ -174,164 +201,4 @@ function registrarPartida() {
     // Si estamos editando una partida, eliminamos las estadísticas anteriores
     if (partidaEditando !== null) {
         const partidaAnterior = partidas[partidaEditando];
-        actualizarEstadisticas(partidaAnterior.equipo1, partidaAnterior.puntosEquipo1, partidaAnterior.puntosEquipo1 > partidaAnterior.puntosEquipo2, false);
-        actualizarEstadisticas(partidaAnterior.equipo2, partidaAnterior.puntosEquipo2, partidaAnterior.puntosEquipo2 > partidaAnterior.puntosEquipo1, false);
-        partidas.splice(partidaEditando, 1); // Eliminar la partida antigua
-        partidaEditando = null; // Resetear la variable
-    }
-
-    const partida = {
-        lugar,
-        fecha,
-        tipoPartida,
-        equipo1: jugadoresEquipo1,
-        equipo2: jugadoresEquipo2,
-        puntosEquipo1,
-        puntosEquipo2
-    };
-
-    partidas.push(partida);
-    actualizarEstadisticas(jugadoresEquipo1, puntosEquipo1, puntosEquipo1 > puntosEquipo2, true);
-    actualizarEstadisticas(jugadoresEquipo2, puntosEquipo2, puntosEquipo2 > puntosEquipo1, true);
-
-    actualizarTabla();
-    actualizarTablaPartidas();
-    limpiarCampos();
-}
-
-function actualizarEstadisticas(jugadores, puntos, esGanador, sumar) {
-    jugadores.forEach(jugador => {
-        if (!participantes[jugador]) {
-            participantes[jugador] = { puntos: 0, partidas: 0, ganadas: 0, perdidas: 0 };
-        }
-
-        if (sumar) {
-            participantes[jugador].puntos += puntos;
-            participantes[jugador].partidas += 1;
-            if (esGanador) {
-                participantes[jugador].ganadas += 1;
-            } else {
-                participantes[jugador].perdidas += 1;
-            }
-        } else {
-            participantes[jugador].puntos -= puntos;
-            participantes[jugador].partidas -= 1;
-            if (esGanador) {
-                participantes[jugador].ganadas -= 1;
-            } else {
-                participantes[jugador].perdidas -= 1;
-            }
-        }
-    });
-}
-
-function actualizarTabla() {
-    // Asegurarse de que todos los jugadores registrados estén en el objeto participantes
-    jugadoresRegistrados.forEach(jugador => {
-        if (!participantes[jugador]) {
-            participantes[jugador] = { puntos: 0, partidas: 0, ganadas: 0, perdidas: 0 };
-        }
-    });
-
-    const criterioOrden = document.getElementById('criterioOrden').value;
-    const tbody = document.querySelector('#tablaGeneral tbody');
-    tbody.innerHTML = '';
-
-    let participantesArray = Object.keys(participantes).map(jugador => ({
-        nombre: jugador,
-        ...participantes[jugador],
-        promedio: (participantes[jugador].partidas > 0 ? (participantes[jugador].puntos / participantes[jugador].partidas) : 0).toFixed(2)
-    }));
-
-    // Ordenar participantes según el criterio seleccionado
-    if (criterioOrden === 'puntos') {
-        participantesArray.sort((a, b) => b.puntos - a.puntos);
-    } else if (criterioOrden === 'partidas') {
-        participantesArray.sort((a, b) => b.partidas - a.partidas);
-    } else {
-        participantesArray.sort((a, b) => b.promedio - a.promedio);
-    }
-
-    participantesArray.forEach((jugador, index) => {
-        const { nombre, puntos, partidas, ganadas, perdidas, promedio } = jugador;
-        const fila = `<tr>
-            <td>${index + 1}</td>
-            <td>${nombre}</td>
-            <td>${puntos}</td>
-            <td>${partidas}</td>
-            <td>${promedio}</td>
-            <td>${ganadas}</td>
-            <td>${perdidas}</td>
-        </tr>`;
-        tbody.innerHTML += fila;
-    });
-}
-
-function actualizarTablaPartidas() {
-    const tbody = document.querySelector('#tablaPartidas tbody');
-    tbody.innerHTML = '';
-
-    partidas.forEach((partida, index) => {
-        const fila = `<tr>
-            <td>${index + 1}</td>
-            <td>${partida.lugar}</td>
-            <td>${partida.fecha}</td>
-            <td>${partida.tipoPartida}</td>
-            <td>${partida.equipo1.join(', ')}</td>
-            <td>${partida.equipo2.join(', ')}</td>
-            <td>${partida.puntosEquipo1}</td>
-            <td>${partida.puntosEquipo2}</td>
-            <td>
-                <button onclick="editarPartida(${index})">Editar</button>
-                <button onclick="eliminarPartida(${index})">Eliminar</button>
-            </td>
-        </tr>`;
-        tbody.innerHTML += fila;
-    });
-}
-
-function editarPartida(index) {
-    const partida = partidas[index];
-    partidaEditando = index; // Establecer la partida que estamos editando
-    document.getElementById('tipoPartida').value = partida.tipoPartida;
-    cambiarFormulario();
-    
-    for (let i = 0; i < partida.equipo1.length; i++) {
-        document.getElementById(`jugador${i + 1}`).value = partida.equipo1[i];
-    }
-    for (let i = 0; i < partida.equipo2.length; i++) {
-        document.getElementById(`jugador${i + 1 + partida.equipo1.length}`).value = partida.equipo2[i];
-    }
-    document.getElementById('puntosEquipo1').value = partida.puntosEquipo1;
-    document.getElementById('puntosEquipo2').value = partida.puntosEquipo2;
-    document.getElementById('lugar').value = partida.lugar;
-    document.getElementById('fecha').value = partida.fecha;
-
-    mostrarVista('nuevaPartida');
-}
-
-function eliminarPartida(index) {
-    const partida = partidas[index];
-    actualizarEstadisticas(partida.equipo1, partida.puntosEquipo1, partida.puntosEquipo1 > partida.puntosEquipo2, false);
-    actualizarEstadisticas(partida.equipo2, partida.puntosEquipo2, partida.puntosEquipo2 > partida.puntosEquipo1, false);
-    partidas.splice(index, 1);
-    actualizarTabla();
-    actualizarTablaPartidas();
-}
-
-function limpiarCampos() {
-    const tipoPartida = document.getElementById('tipoPartida').value;
-    const numJugadores = tipoPartida === '2v2' ? 4 : 6;
-
-    for (let i = 1; i <= numJugadores; i++) {
-        document.getElementById(`jugador${i}`).value = '';
-    }
-    document.getElementById('puntosEquipo1').value = '';
-    document.getElementById('puntosEquipo2').value = '';
-    document.getElementById('lugar').value = '';
-    document.getElementById('fecha').value = '';
-}
-
-// Inicializar el formulario y tabla
-cambiarFormulario();
-actualizarTabla();
+        actualizarEstadisticas(partidaAnterior.e
