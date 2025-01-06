@@ -1,4 +1,4 @@
-const jugadoresRegistrados = ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
+const jugadoresRegistrados =['Fede','Nico', 'Tobi', 'Ernes','Santi','Caño', 'Colo','Mati', 'Jero','Vega']
 
 const participantes = {};
 const partidas = [];
@@ -11,7 +11,6 @@ function mostrarVista(vista) {
 
     if (vista === 'torneo') {
         document.getElementById('vistaTorneo').classList.add('active');
-        actualizarTabla();
     } else if (vista === 'registroPartidas') {
         document.getElementById('vistaRegistroPartidas').classList.add('active');
         actualizarTablaPartidas();
@@ -19,10 +18,10 @@ function mostrarVista(vista) {
         document.getElementById('passwordDialog').style.display = 'block';
     } else if (vista === 'reglamento') {
         document.getElementById('vistaReglamento').classList.add('active');
-    } else if (vista === 'nuevaPartida') {
-        document.getElementById('vistaNuevaPartida').classList.add('active');
     }
 }
+
+
 
 function verificarPassword() {
     const inputPassword = document.getElementById('passwordInput').value;
@@ -226,13 +225,6 @@ function actualizarEstadisticas(jugadores, puntos, esGanador, sumar) {
 }
 
 function actualizarTabla() {
-    // Asegurarse de que todos los jugadores registrados estén en el objeto participantes
-    jugadoresRegistrados.forEach(jugador => {
-        if (!participantes[jugador]) {
-            participantes[jugador] = { puntos: 0, partidas: 0, ganadas: 0, perdidas: 0 };
-        }
-    });
-
     const criterioOrden = document.getElementById('criterioOrden').value;
     const tbody = document.querySelector('#tablaGeneral tbody');
     tbody.innerHTML = '';
@@ -240,7 +232,7 @@ function actualizarTabla() {
     let participantesArray = Object.keys(participantes).map(jugador => ({
         nombre: jugador,
         ...participantes[jugador],
-        promedio: (participantes[jugador].partidas > 0 ? (participantes[jugador].puntos / participantes[jugador].partidas) : 0).toFixed(2)
+        promedio: (participantes[jugador].puntos / participantes[jugador].partidas).toFixed(2)
     }));
 
     // Ordenar participantes según el criterio seleccionado
@@ -307,7 +299,7 @@ function editarPartida(index) {
     document.getElementById('lugar').value = partida.lugar;
     document.getElementById('fecha').value = partida.fecha;
 
-    mostrarVista('nuevaPartida');
+    mostrarVista('torneo');
 }
 
 function eliminarPartida(index) {
