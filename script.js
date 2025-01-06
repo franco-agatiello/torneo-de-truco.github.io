@@ -118,7 +118,9 @@ function eliminarJugador(jugador) {
         actualizarListaJugadores();
         cambiarFormulario();
     }
-}function registrarPartida() {
+}
+
+function registrarPartida() {
     const tipoPartida = document.getElementById('tipoPartida').value;
     const lugar = document.getElementById('lugar').value.trim();
     const fecha = document.getElementById('fecha').value;
@@ -224,6 +226,13 @@ function actualizarEstadisticas(jugadores, puntos, esGanador, sumar) {
 }
 
 function actualizarTabla() {
+    // Asegurarse de que todos los jugadores registrados estén en el objeto participantes
+    jugadoresRegistrados.forEach(jugador => {
+        if (!participantes[jugador]) {
+            participantes[jugador] = { puntos: 0, partidas: 0, ganadas: 0, perdidas: 0 };
+        }
+    });
+
     const criterioOrden = document.getElementById('criterioOrden').value;
     const tbody = document.querySelector('#tablaGeneral tbody');
     tbody.innerHTML = '';
@@ -231,7 +240,7 @@ function actualizarTabla() {
     let participantesArray = Object.keys(participantes).map(jugador => ({
         nombre: jugador,
         ...participantes[jugador],
-        promedio: (participantes[jugador].puntos / participantes[jugador].partidas).toFixed(2)
+        promedio: (participantes[jugador].partidas > 0 ? (participantes[jugador].puntos / participantes[jugador].partidas) : 0).toFixed(2)
     }));
 
     // Ordenar participantes según el criterio seleccionado
