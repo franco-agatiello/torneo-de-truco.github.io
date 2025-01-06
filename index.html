@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Torneo de Truco - Grupo Casino</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon link -->
@@ -17,6 +17,7 @@
         </header>
         <nav>
             <button onclick="mostrarVista('torneo')">Torneo</button>
+            <button onclick="mostrarVista('nuevaPartida')">Ingresar Nueva Partida</button>
             <button onclick="mostrarVista('registroPartidas')">Registro de Partidas</button>
             <button onclick="mostrarVista('gestion')">Gestionar Jugadores</button>
             <button onclick="mostrarVista('reglamento')">Reglamento</button>
@@ -24,21 +25,6 @@
 
         <main>
             <div id="vistaTorneo" class="vista active">
-                <div class="input-row">
-                    <label for="tipoPartida">Tipo de Partida:</label>
-                    <select id="tipoPartida" onchange="cambiarFormulario()">
-                        <option value="2v2">2 vs 2</option>
-                        <option value="3v3">3 vs 3</option>
-                    </select>
-                </div>
-                <div id="formularioPartida">
-                    <!-- El formulario dinámico se insertará aquí -->
-                </div>
-                <div class="input-row">
-                    <input type="text" id="lugar" placeholder="Lugar">
-                    <input type="date" id="fecha">
-                </div>
-                <button onclick="registrarPartida()">Registrar Partida</button>
                 <div class="input-row">
                     <label for="criterioOrden">Ordenar por:</label>
                     <select id="criterioOrden" onchange="actualizarTabla()">
@@ -61,6 +47,24 @@
                     </thead>
                     <tbody></tbody>
                 </table>
+            </div>
+
+            <div id="vistaNuevaPartida" class="vista">
+                <div class="input-row">
+                    <label for="tipoPartida">Tipo de Partida:</label>
+                    <select id="tipoPartida" onchange="cambiarFormulario()">
+                        <option value="2v2">2 vs 2</option>
+                        <option value="3v3">3 vs 3</option>
+                    </select>
+                </div>
+                <div id="formularioPartida">
+                    <!-- El formulario dinámico se insertará aquí -->
+                </div>
+                <div class="input-row">
+                    <input type="text" id="lugar" placeholder="Lugar">
+                    <input type="date" id="fecha">
+                </div>
+                <button onclick="registrarPartida()">Registrar Partida</button>
             </div>
 
             <div id="vistaRegistroPartidas" class="vista">
@@ -208,6 +212,10 @@
                 <p class="mensaje">que miras puto</p>
             </div>
         </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
     </div>
     <script src="script.js"></script>
 </body>
