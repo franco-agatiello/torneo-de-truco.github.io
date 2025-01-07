@@ -10,7 +10,7 @@ function guardarDatos() {
     localStorage.setItem('participantes', JSON.stringify(participantes));
     localStorage.setItem('partidas', JSON.stringify(partidas));
 }
-
+ 
 function inicializarParticipantes() {
     jugadoresRegistrados.forEach(jugador => {
         if (!participantes[jugador]) {
