@@ -1,16 +1,64 @@
-const jugadoresRegistrados = JSON.parse(localStorage.getItem('jugadoresRegistrados')) || ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
-const participantes = JSON.parse(localStorage.getItem('participantes')) || {};
-const partidas = JSON.parse(localStorage.getItem('partidas')) || [];
+// Firebase configuration (Debe ir al principio del archivo)
+const firebaseConfig = {
+    apiKey: "AIzaSyDGfm4X9MuV53nOxiK0sdJJuFhCDJl9qKY",
+    authDomain: "torneo-truco-2025.firebaseapp.com",
+    databaseURL: "https://torneo-truco-2025-default-rtdb.firebaseio.com",
+    projectId: "torneo-truco-2025",
+    storageBucket: "torneo-truco-2025.appspot.com",
+    messagingSenderId: "982741537504",
+    appId: "1:982741537504:web:c9223250c114ca6720b685",
+    measurementId: "G-X83853DET2"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// Variables globales
+let jugadoresRegistrados = [];
+let participantes = {};
+let partidas = [];
 const passwordCorrecta = "trucoargento";
 let partidaEditando = null; // Variable para rastrear la partida que se está editando
 let indexEliminar = null; // Variable para rastrear la partida que se está eliminando
 
+// Function to save data to Firebase Realtime Database
 function guardarDatos() {
-    localStorage.setItem('jugadoresRegistrados', JSON.stringify(jugadoresRegistrados));
-    localStorage.setItem('participantes', JSON.stringify(participantes));
-    localStorage.setItem('partidas', JSON.stringify(partidas));
+    database.ref('data/').set({
+        jugadoresRegistrados: jugadoresRegistrados,
+        participantes: participantes,
+        partidas: partidas
+    });
 }
- 
+
+// Function to load data from Firebase Realtime Database
+function cargarDatos() {
+    const dbRef = database.ref();
+    dbRef.child('data/').get().then((snapshot) => {
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            jugadoresRegistrados = data.jugadoresRegistrados || ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
+            participantes = data.participantes || {};
+            partidas = data.partidas || [];
+            inicializarParticipantes();
+            actualizarTabla();
+            actualizarTablaPartidas();
+        } else {
+            jugadoresRegistrados = ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
+            participantes = {};
+            partidas = [];
+            inicializarParticipantes();
+            actualizarTabla();
+            actualizarTablaPartidas();
+        }
+    }).catch((error) => {
+        console.error(error);
+    });
+}
+
+// Call cargarDatos function when the app loads
+cargarDatos();
+
 function inicializarParticipantes() {
     jugadoresRegistrados.forEach(jugador => {
         if (!participantes[jugador]) {
