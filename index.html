@@ -2,13 +2,13 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Torneo de Truco - Grupo Casino</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- .Favicon link -->
 </head>
 <body>
     <div class="container">
+        <!-- Aquí va el contenido principal -->
         <header>
             <div class="header-content">
                 <img src="logo.png" alt="Logo Grupo Casino" class="logo">
@@ -210,10 +210,29 @@
                 <button onclick="verificarPassword()">Ingresar</button>
                 <button onclick="ocultarDialogo()">Volver</button>
                 <p id="passwordError" class="error-message" style="display:none;">Contraseña incorrecta</p>
-                <p class="mensaje">que miras puto</p>
             </div>
         </div>
     </div>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
+    <script>
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGfm4X9MuV53nOxiK0sdJJuFhCDJl9qKY",
+            authDomain: "torneo-truco-2025.firebaseapp.com",
+            databaseURL: "https://torneo-truco-2025-default-rtdb.firebaseio.com",
+            projectId: "torneo-truco-2025",
+            storageBucket: "torneo-truco-2025.firebasestorage.app",
+            messagingSenderId: "982741537504",
+            appId: "1:982741537504:web:c9223250c114ca6720b685",
+            measurementId: "G-X83853DET2"
+        };
+
+        // Inicializar Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database(app);
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
