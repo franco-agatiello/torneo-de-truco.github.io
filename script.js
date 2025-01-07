@@ -1,4 +1,4 @@
-jugadoresRegistrados = JSON.parse(localStorage.getItem('jugadoresRegistrados')) || ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
+const jugadoresRegistrados = JSON.parse(localStorage.getItem('jugadoresRegistrados')) || ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
 const participantes = JSON.parse(localStorage.getItem('participantes')) || {};
 const partidas = JSON.parse(localStorage.getItem('partidas')) || [];
 const passwordCorrecta = "trucoargento";
