@@ -13,16 +13,6 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
-
-// Variables globales
-let jugadoresRegistrados = ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
-let participantes = {};
-let partidas = [];
-const passwordCorrecta = "trucoargento";
-let partidaEditando = null; // Variable para rastrear la partida que se está editando
-let indexEliminar = null; // Variable para rastrear la partida que se está eliminando
-
-// Function to save data to Firebase Realtime Database
 function guardarDatos() {
     database.ref('data/').set({
         jugadoresRegistrados: jugadoresRegistrados,
@@ -30,29 +20,6 @@ function guardarDatos() {
         partidas: partidas
     });
 }
-
-// Function to load data from Firebase Realtime Database
-function cargarDatos() {
-    const dbRef = database.ref();
-    dbRef.child('data/').get().then((snapshot) => {
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            jugadoresRegistrados = data.jugadoresRegistrados || jugadoresRegistrados;
-            participantes = data.participantes || participantes;
-            partidas = data.partidas || partidas;
-            inicializarParticipantes();
-            actualizarTabla();
-            actualizarTablaPartidas();
-        } else {
-            console.log("No data available");
-        }
-    }).catch((error) => {
-        console.error(error);
-    });
-}
-
-// Call cargarDatos function when the app loads
-cargarDatos();
 
 function inicializarParticipantes() {
     jugadoresRegistrados.forEach(jugador => {
@@ -404,4 +371,4 @@ function limpiarCampos() {
 cambiarFormulario();
 inicializarParticipantes(); // Inicializar participantes al cargar la página
 actualizarTabla();
-actualizarTablaPartidas();
+actualizarTablaPartidas(); 
