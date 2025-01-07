@@ -2,14 +2,13 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Torneo de Truco - Grupo Casino</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon link -->
 </head>
 <body>
     <div class="container">
-        <!-- Aquí va el contenido principal -->
         <header>
             <div class="header-content">
                 <img src="logo.png" alt="Logo Grupo Casino" class="logo">
@@ -211,16 +210,10 @@
                 <button onclick="verificarPassword()">Ingresar</button>
                 <button onclick="ocultarDialogo()">Volver</button>
                 <p id="passwordError" class="error-message" style="display:none;">Contraseña incorrecta</p>
+                <p class="mensaje">que miras puto</p>
             </div>
         </div>
     </div>
-    <!-- Firebase -->
-</div>
-    <!-- Agrega los scripts de Firebase al final del body -->
-    <script src="https://www.gstatic.com/firebasejs/9.7.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.7.0/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.7.0/firebase-analytics.js"></script>
-    <!-- Tu archivo JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
