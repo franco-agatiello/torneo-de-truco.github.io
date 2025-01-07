@@ -1,15 +1,79 @@
+// Inicializar Firebase
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getDatabase, ref, set, get, onValue, push, update, remove } from "firebase/database";
+
+// Configuración de tu aplicación web de Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDGfm4X9MuV53nOxiK0sdJJuFhCDJl9qKY",
+  authDomain: "torneo-truco-2025.firebaseapp.com",
+  databaseURL: "https://torneo-truco-2025-default-rtdb.firebaseio.com",
+  projectId: "torneo-truco-2025",
+  storageBucket: "torneo-truco-2025.appspot.com",
+  messagingSenderId: "982741537504",
+  appId: "1:982741537504:web:c9223250c114ca6720b685",
+  measurementId: "G-X83853DET2"
+};
+
+// Inicializa Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const database = getDatabase(app);
+
+// Función para guardar datos en Firebase
+function guardarDatosEnFirebase() {
+    set(ref(database, 'torneo/jugadoresRegistrados'), jugadoresRegistrados);
+    set(ref(database, 'torneo/participantes'), participantes);
+    set(ref(database, 'torneo/partidas'), partidas);
+}
+
+// Función para cargar datos desde Firebase
+function cargarDatosDesdeFirebase() {
+    const jugadoresRef = ref(database, 'torneo/jugadoresRegistrados');
+    const participantesRef = ref(database, 'torneo/participantes');
+    const partidasRef = ref(database, 'torneo/partidas');
+
+    onValue(jugadoresRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            jugadoresRegistrados = data;
+            actualizarListaJugadores();
+            cambiarFormulario();
+        }
+    });
+
+    onValue(participantesRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            Object.assign(participantes, data);
+            actualizarTabla();
+        }
+    });
+
+    onValue(partidasRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            partidas = data;
+            actualizarTablaPartidas();
+        }
+    });
+}
+
+// Llama a la función para cargar datos cuando la página se carga
+document.addEventListener('DOMContentLoaded', cargarDatosDesdeFirebase);
+
+// Reemplaza la función guardarDatos con la nueva que guarda en Firebase
+function guardarDatos() {
+    guardarDatosEnFirebase();
+}
+
+// Tu código existente para la lógica de la aplicación...
 const jugadoresRegistrados = JSON.parse(localStorage.getItem('jugadoresRegistrados')) || ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
 const participantes = JSON.parse(localStorage.getItem('participantes')) || {};
 const partidas = JSON.parse(localStorage.getItem('partidas')) || [];
 const passwordCorrecta = "trucoargento";
 let partidaEditando = null; // Variable para rastrear la partida que se está editando
 let indexEliminar = null; // Variable para rastrear la partida que se está eliminando
-
-function guardarDatos() {
-    localStorage.setItem('jugadoresRegistrados', JSON.stringify(jugadoresRegistrados));
-    localStorage.setItem('participantes', JSON.stringify(participantes));
-    localStorage.setItem('partidas', JSON.stringify(partidas));
-}
 
 function inicializarParticipantes() {
     jugadoresRegistrados.forEach(jugador => {
