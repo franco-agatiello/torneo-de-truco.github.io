@@ -408,23 +408,7 @@ function limpiarCampos() {
     document.getElementById('fecha').value = '';
 }
 
-// Escribir datos en Firebase Realtime Database
-function escribirDatosPrueba() {
-    database.ref('prueba/').set({
-        mensaje: "Firebase está funcionando correctamente"
-    }).then(() => {
-        console.log("Datos de prueba escritos correctamente");
-    }).catch((error) => {
-        console.error("Error al escribir datos de prueba:", error);
-    });
-}
 
-// Leer datos de Firebase Realtime Database
-function leerDatosPrueba() {
-    const dbRef = database.ref('prueba/');
-    dbRef.get().then((snapshot) => {
-        if (snapshot.exists())
-            
 // Inicializar el formulario y tabla
 cambiarFormulario();
 inicializarParticipantes(); // Inicializar participantes al cargar la página
