@@ -1,14 +1,34 @@
-const jugadoresRegistrados = JSON.parse(localStorage.getItem('jugadoresRegistrados')) || ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
-const participantes = JSON.parse(localStorage.getItem('participantes')) || {};
-const partidas = JSON.parse(localStorage.getItem('partidas')) || [];
+// Importa las funciones que necesitas de los SDKs que necesitas
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+import { getDatabase, ref, set, get, onValue, remove, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+// Tu configuración de Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyDGfm4X9MuV53nOxiK0sdJJuFhCDJl9qKY",
+    authDomain: "torneo-truco-2025.firebaseapp.com",
+    databaseURL: "https://torneo-truco-2025-default-rtdb.firebaseio.com",
+    projectId: "torneo-truco-2025",
+    storageBucket: "torneo-truco-2025.firebasestorage.app",
+    messagingSenderId: "982741537504",
+    appId: "1:982741537504:web:c9223250c114ca6720b685",
+    measurementId: "G-X83853DET2"
+};
+
+// Inicializa Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+let jugadoresRegistrados = [];
+let participantes = {};
+let partidas = [];
 const passwordCorrecta = "trucoargento";
-let partidaEditando = null; // Variable para rastrear la partida que se está editando
-let indexEliminar = null; // Variable para rastrear la partida que se está eliminando
+let partidaEditando = null;
+let indexEliminar = null;
 
 function guardarDatos() {
-    localStorage.setItem('jugadoresRegistrados', JSON.stringify(jugadoresRegistrados));
-    localStorage.setItem('participantes', JSON.stringify(participantes));
-    localStorage.setItem('partidas', JSON.stringify(partidas));
+    set(ref(db, 'jugadoresRegistrados'), jugadoresRegistrados);
+    set(ref(db, 'participantes'), participantes);
+    set(ref(db, 'partidas'), partidas);
 }
 
 function inicializarParticipantes() {
@@ -44,7 +64,7 @@ function verificarPassword() {
         document.getElementById('passwordDialog').style.display = 'none';
         if (indexEliminar !== null) {
             eliminarPartida(indexEliminar);
-            indexEliminar = null; // Resetear la variable
+            indexEliminar = null;
         } else {
             document.getElementById('vistaGestion').classList.add('active');
             actualizarListaJugadores();
@@ -56,8 +76,8 @@ function verificarPassword() {
 
 function ocultarDialogo() {
     document.getElementById('passwordDialog').style.display = 'none';
-    indexEliminar = null; // Resetear la variable en caso de cancelar la eliminación
-    mostrarVista('torneo'); // Vuelve a la vista principal
+    indexEliminar = null;
+    mostrarVista('torneo');
 }
 
 function actualizarListaJugadores() {
@@ -126,7 +146,7 @@ function agregarJugador() {
         actualizarListaJugadores();
         cambiarFormulario();
         document.getElementById('nuevoJugador').value = '';
-        inicializarParticipantes(); // Inicializar el nuevo jugador
+        inicializarParticipantes();
         guardarDatos();
     } else {
         alert('Por favor, introduce un nombre válido y no duplicado.');
@@ -357,8 +377,26 @@ function limpiarCampos() {
     document.getElementById('fecha').value = '';
 }
 
-// Inicializar el formulario y tabla
+// Leer datos desde Firebase cuando la página carga
+onValue(ref(db, 'jugadoresRegistrados'), (snapshot) => {
+    jugadoresRegistrados = snapshot.val() || [];
+    actualizarListaJugadores();
+    cambiarFormulario();
+});
+
+onValue(ref(db, 'participantes'), (snapshot) => {
+    participantes = snapshot.val() || {};
+    inicializarParticipantes();
+    actualizarTabla();
+});
+
+onValue(ref(db, 'partidas'), (snapshot) => {
+    partidas = snapshot.val() || [];
+    actualizarTablaPartidas();
+});
+
+// Inicializar el formulario y la tabla
 cambiarFormulario();
-inicializarParticipantes(); // Inicializar participantes al cargar la página
+inicializarParticipantes();
 actualizarTabla();
 actualizarTablaPartidas();
