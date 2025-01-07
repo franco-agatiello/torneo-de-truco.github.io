@@ -1,16 +1,65 @@
-const jugadoresRegistrados = JSON.parse(localStorage.getItem('jugadoresRegistrados')) || ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
-const participantes = JSON.parse(localStorage.getItem('participantes')) || {};
-const partidas = JSON.parse(localStorage.getItem('partidas')) || [];
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getDatabase, ref, set, get, child, update, remove } from "firebase/database";
+
+// Firebase configuration (Debe ir al principio del archivo)
+const firebaseConfig = {
+  apiKey: "AIzaSyDGfm4X9MuV53nOxiK0sdJJuFhCDJl9qKY",
+  authDomain: "torneo-truco-2025.firebaseapp.com",
+  databaseURL: "https://torneo-truco-2025-default-rtdb.firebaseio.com",
+  projectId: "torneo-truco-2025",
+  storageBucket: "torneo-truco-2025.appspot.com",
+  messagingSenderId: "982741537504",
+  appId: "1:982741537504:web:c9223250c114ca6720b685",
+  measurementId: "G-X83853DET2"
+};
+
+// Initialize Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const analytics = firebase.analytics();
+const database = firebase.database();
+
+// Function to save data to Firebase Realtime Database
+function guardarDatos() {
+    firebase.database().ref('data/').set({
+        jugadoresRegistrados: jugadoresRegistrados,
+        participantes: participantes,
+        partidas: partidas
+    });
+}
+
+// Function to load data from Firebase Realtime Database
+function cargarDatos() {
+    const dbRef = firebase.database().ref();
+    dbRef.child('data/').get().then((snapshot) => {
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            jugadoresRegistrados = data.jugadoresRegistrados || jugadoresRegistrados;
+            participantes = data.participantes || participantes;
+            partidas = data.partidas || partidas;
+            inicializarParticipantes();
+            actualizarTabla();
+            actualizarTablaPartidas();
+        } else {
+            console.log("No data available");
+        }
+    }).catch((error) => {
+        console.error(error);
+    });
+}
+
+// Call cargarDatos function when the app loads
+cargarDatos();
+
+// Tu código original continua aquí
+let jugadoresRegistrados = ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
+let participantes = {};
+let partidas = [];
 const passwordCorrecta = "trucoargento";
 let partidaEditando = null; // Variable para rastrear la partida que se está editando
 let indexEliminar = null; // Variable para rastrear la partida que se está eliminando
-
-function guardarDatos() {
-    localStorage.setItem('jugadoresRegistrados', JSON.stringify(jugadoresRegistrados));
-    localStorage.setItem('participantes', JSON.stringify(participantes));
-    localStorage.setItem('partidas', JSON.stringify(partidas));
-}
-
+ 
 function inicializarParticipantes() {
     jugadoresRegistrados.forEach(jugador => {
         if (!participantes[jugador]) {
