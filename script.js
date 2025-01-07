@@ -1,10 +1,23 @@
-// script.js
-
-const jugadoresRegistrados = ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
-const participantes = {};
-const partidas = [];
+const jugadoresRegistrados = JSON.parse(localStorage.getItem('jugadoresRegistrados')) || ['Fede' ,'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
+const participantes = JSON.parse(localStorage.getItem('participantes')) || {};
+const partidas = JSON.parse(localStorage.getItem('partidas')) || [];
 const passwordCorrecta = "trucoargento";
 let partidaEditando = null; // Variable para rastrear la partida que se está editando
+let indexEliminar = null; // Variable para rastrear la partida que se está eliminando
+
+function guardarDatos() {
+    localStorage.setItem('jugadoresRegistrados', JSON.stringify(jugadoresRegistrados));
+    localStorage.setItem('participantes', JSON.stringify(participantes));
+    localStorage.setItem('partidas', JSON.stringify(partidas));
+}
+
+function inicializarParticipantes() {
+    jugadoresRegistrados.forEach(jugador => {
+        if (!participantes[jugador]) {
+            participantes[jugador] = { puntos: 0, partidas: 0, ganadas: 0, perdidas: 0 };
+        }
+    });
+}
 
 function mostrarVista(vista) {
     const vistas = document.querySelectorAll('.vista');
@@ -29,8 +42,13 @@ function verificarPassword() {
     const inputPassword = document.getElementById('passwordInput').value;
     if (inputPassword === passwordCorrecta) {
         document.getElementById('passwordDialog').style.display = 'none';
-        document.getElementById('vistaGestion').classList.add('active');
-        actualizarListaJugadores();
+        if (indexEliminar !== null) {
+            eliminarPartida(indexEliminar);
+            indexEliminar = null; // Resetear la variable
+        } else {
+            document.getElementById('vistaGestion').classList.add('active');
+            actualizarListaJugadores();
+        }
     } else {
         document.getElementById('passwordError').style.display = 'block';
     }
@@ -38,6 +56,7 @@ function verificarPassword() {
 
 function ocultarDialogo() {
     document.getElementById('passwordDialog').style.display = 'none';
+    indexEliminar = null; // Resetear la variable en caso de cancelar la eliminación
     mostrarVista('torneo'); // Vuelve a la vista principal
 }
 
@@ -107,6 +126,8 @@ function agregarJugador() {
         actualizarListaJugadores();
         cambiarFormulario();
         document.getElementById('nuevoJugador').value = '';
+        inicializarParticipantes(); // Inicializar el nuevo jugador
+        guardarDatos();
     } else {
         alert('Por favor, introduce un nombre válido y no duplicado.');
     }
@@ -118,8 +139,10 @@ function eliminarJugador(jugador) {
         jugadoresRegistrados.splice(index, 1);
         actualizarListaJugadores();
         cambiarFormulario();
+        guardarDatos();
     }
 }
+
 function registrarPartida() {
     const tipoPartida = document.getElementById('tipoPartida').value;
     const lugar = document.getElementById('lugar').value.trim();
@@ -197,6 +220,7 @@ function registrarPartida() {
     actualizarTabla();
     actualizarTablaPartidas();
     limpiarCampos();
+    guardarDatos();
 }
 
 function actualizarEstadisticas(jugadores, puntos, esGanador, sumar) {
@@ -230,10 +254,12 @@ function actualizarTabla() {
     const tbody = document.querySelector('#tablaGeneral tbody');
     tbody.innerHTML = '';
 
+    inicializarParticipantes(); // Asegurarse de que todos los participantes estén inicializados
+
     let participantesArray = Object.keys(participantes).map(jugador => ({
         nombre: jugador,
         ...participantes[jugador],
-        promedio: (participantes[jugador].puntos / participantes[jugador].partidas).toFixed(2)
+        promedio: (participantes[jugador].puntos / (participantes[jugador].partidas || 1)).toFixed(2) // Evitar división por cero
     }));
 
     // Ordenar participantes según el criterio seleccionado
@@ -304,12 +330,8 @@ function editarPartida(index) {
 }
 
 function mostrarDialogoEliminar(index) {
-    const password = prompt("Ingrese la contraseña para eliminar la partida:");
-    if (password === passwordCorrecta) {
-        eliminarPartida(index);
-    } else {
-        alert("Contraseña incorrecta. No se puede eliminar la partida.");
-    }
+    indexEliminar = index; // Guardar el índice de la partida que se desea eliminar
+    document.getElementById('passwordDialog').style.display = 'block';
 }
 
 function eliminarPartida(index) {
@@ -319,6 +341,7 @@ function eliminarPartida(index) {
     partidas.splice(index, 1);
     actualizarTabla();
     actualizarTablaPartidas();
+    guardarDatos();
 }
 
 function limpiarCampos() {
@@ -336,4 +359,6 @@ function limpiarCampos() {
 
 // Inicializar el formulario y tabla
 cambiarFormulario();
+inicializarParticipantes(); // Inicializar participantes al cargar la página
 actualizarTabla();
+actualizarTablaPartidas();
