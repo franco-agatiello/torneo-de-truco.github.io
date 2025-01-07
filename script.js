@@ -1,18 +1,14 @@
-const JUGADORES_REGISTRADOS_KEY = 'jugadoresRegistrados';
-const PARTICIPANTES_KEY = 'participantes';
-const PARTIDAS_KEY = 'partidas';
-const PASSWORD_CORRECTA = "trucoargento";
-
-const jugadoresRegistrados = JSON.parse(localStorage.getItem(JUGADORES_REGISTRADOS_KEY)) || ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
-const participantes = JSON.parse(localStorage.getItem(PARTICIPANTES_KEY)) || {};
-const partidas = JSON.parse(localStorage.getItem(PARTIDAS_KEY)) || [];
-let partidaEditando = null;
-let indexEliminar = null;
+jugadoresRegistrados = JSON.parse(localStorage.getItem('jugadoresRegistrados')) || ['Fede', 'Nico', 'Tobi', 'Ernes', 'Santi', 'Caño', 'Colo', 'Mati', 'Jero', 'Vega'];
+const participantes = JSON.parse(localStorage.getItem('participantes')) || {};
+const partidas = JSON.parse(localStorage.getItem('partidas')) || [];
+const passwordCorrecta = "trucoargento";
+let partidaEditando = null; // Variable para rastrear la partida que se está editando
+let indexEliminar = null; // Variable para rastrear la partida que se está eliminando
 
 function guardarDatos() {
-    localStorage.setItem(JUGADORES_REGISTRADOS_KEY, JSON.stringify(jugadoresRegistrados));
-    localStorage.setItem(PARTICIPANTES_KEY, JSON.stringify(participantes));
-    localStorage.setItem(PARTIDAS_KEY, JSON.stringify(partidas));
+    localStorage.setItem('jugadoresRegistrados', JSON.stringify(jugadoresRegistrados));
+    localStorage.setItem('participantes', JSON.stringify(participantes));
+    localStorage.setItem('partidas', JSON.stringify(partidas));
 }
 
 function inicializarParticipantes() {
@@ -44,11 +40,11 @@ function mostrarVista(vista) {
 
 function verificarPassword() {
     const inputPassword = document.getElementById('passwordInput').value;
-    if (inputPassword === PASSWORD_CORRECTA) {
+    if (inputPassword === passwordCorrecta) {
         document.getElementById('passwordDialog').style.display = 'none';
         if (indexEliminar !== null) {
             eliminarPartida(indexEliminar);
-            indexEliminar = null;
+            indexEliminar = null; // Resetear la variable
         } else {
             document.getElementById('vistaGestion').classList.add('active');
             actualizarListaJugadores();
@@ -60,8 +56,8 @@ function verificarPassword() {
 
 function ocultarDialogo() {
     document.getElementById('passwordDialog').style.display = 'none';
-    indexEliminar = null;
-    mostrarVista('torneo');
+    indexEliminar = null; // Resetear la variable en caso de cancelar la eliminación
+    mostrarVista('torneo'); // Vuelve a la vista principal
 }
 
 function actualizarListaJugadores() {
@@ -96,8 +92,8 @@ function cambiarFormulario() {
             </div>
             <div class="jugador-row">
                 <h3>Puntuación</h3>
-                <input type="number" id="puntosEquipo1" placeholder="Puntos Equipo 1" min="0">
-                <input type="number" id="puntosEquipo2" placeholder="Puntos Equipo 2" min="0">
+                <input type="number" id="puntosEquipo1" placeholder="Puntos Equipo 1">
+                <input type="number" id="puntosEquipo2" placeholder="Puntos Equipo 2">
             </div>
         `;
     } else if (tipoPartida === '3v3') {
@@ -116,8 +112,8 @@ function cambiarFormulario() {
             </div>
             <div class="jugador-row">
                 <h3>Puntuación</h3>
-                <input type="number" id="puntosEquipo1" placeholder="Puntos Equipo 1" min="0">
-                <input type="number" id="puntosEquipo2" placeholder="Puntos Equipo 2" min="0">
+                <input type="number" id="puntosEquipo1" placeholder="Puntos Equipo 1">
+                <input type="number" id="puntosEquipo2" placeholder="Puntos Equipo 2">
             </div>
         `;
     }
@@ -130,7 +126,7 @@ function agregarJugador() {
         actualizarListaJugadores();
         cambiarFormulario();
         document.getElementById('nuevoJugador').value = '';
-        inicializarParticipantes();
+        inicializarParticipantes(); // Inicializar el nuevo jugador
         guardarDatos();
     } else {
         alert('Por favor, introduce un nombre válido y no duplicado.');
@@ -198,12 +194,13 @@ function registrarPartida() {
         }
     }
 
+    // Si estamos editando una partida, eliminamos las estadísticas anteriores
     if (partidaEditando !== null) {
         const partidaAnterior = partidas[partidaEditando];
         actualizarEstadisticas(partidaAnterior.equipo1, partidaAnterior.puntosEquipo1, partidaAnterior.puntosEquipo1 > partidaAnterior.puntosEquipo2, false);
         actualizarEstadisticas(partidaAnterior.equipo2, partidaAnterior.puntosEquipo2, partidaAnterior.puntosEquipo2 > partidaAnterior.puntosEquipo1, false);
-        partidas.splice(partidaEditando, 1);
-        partidaEditando = null;
+        partidas.splice(partidaEditando, 1); // Eliminar la partida antigua
+        partidaEditando = null; // Resetear la variable
     }
 
     const partida = {
@@ -257,14 +254,15 @@ function actualizarTabla() {
     const tbody = document.querySelector('#tablaGeneral tbody');
     tbody.innerHTML = '';
 
-    inicializarParticipantes();
+    inicializarParticipantes(); // Asegurarse de que todos los participantes estén inicializados
 
     let participantesArray = Object.keys(participantes).map(jugador => ({
         nombre: jugador,
         ...participantes[jugador],
-        promedio: (participantes[jugador].puntos / (participantes[jugador].partidas || 1)).toFixed(2)
+        promedio: (participantes[jugador].puntos / (participantes[jugador].partidas || 1)).toFixed(2) // Evitar división por cero
     }));
 
+    // Ordenar participantes según el criterio seleccionado
     if (criterioOrden === 'puntos') {
         participantesArray.sort((a, b) => b.puntos - a.puntos);
     } else if (criterioOrden === 'partidas') {
@@ -313,7 +311,7 @@ function actualizarTablaPartidas() {
 
 function editarPartida(index) {
     const partida = partidas[index];
-    partidaEditando = index;
+    partidaEditando = index; // Establecer la partida que estamos editando
     document.getElementById('tipoPartida').value = partida.tipoPartida;
     cambiarFormulario();
     
@@ -332,7 +330,7 @@ function editarPartida(index) {
 }
 
 function mostrarDialogoEliminar(index) {
-    indexEliminar = index;
+    indexEliminar = index; // Guardar el índice de la partida que se desea eliminar
     document.getElementById('passwordDialog').style.display = 'block';
 }
 
@@ -359,7 +357,8 @@ function limpiarCampos() {
     document.getElementById('fecha').value = '';
 }
 
+// Inicializar el formulario y tabla
 cambiarFormulario();
-inicializarParticipantes();
+inicializarParticipantes(); // Inicializar participantes al cargar la página
 actualizarTabla();
-actualizarTablaPartidas();
+actualizarTablaPartidas(); 
