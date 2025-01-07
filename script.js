@@ -22,15 +22,6 @@ const passwordCorrecta = "trucoargento";
 let partidaEditando = null; // Variable para rastrear la partida que se está editando
 let indexEliminar = null; // Variable para rastrear la partida que se está eliminando
 
-// Function to save data to Firebase Realtime Database
-function guardarDatos() {
-    database.ref('data/').set({
-        jugadoresRegistrados: jugadoresRegistrados,
-        participantes: participantes,
-        partidas: partidas
-    });
-}
-
 // Function to load data from Firebase Realtime Database
 function cargarDatos() {
     const dbRef = database.ref();
@@ -59,6 +50,18 @@ function cargarDatos() {
 // Call cargarDatos function when the app loads
 cargarDatos();
 
+// Function to save data to Firebase Realtime Database
+function guardarDatos() {
+    database.ref('data/').set({
+        jugadoresRegistrados: jugadoresRegistrados,
+        participantes: participantes,
+        partidas: partidas
+    }).catch((error) => {
+        console.error(error);
+    });
+}
+
+// Functions to initialize participants, show views, verify password, etc.
 function inicializarParticipantes() {
     jugadoresRegistrados.forEach(jugador => {
         if (!participantes[jugador]) {
@@ -405,6 +408,23 @@ function limpiarCampos() {
     document.getElementById('fecha').value = '';
 }
 
+// Escribir datos en Firebase Realtime Database
+function escribirDatosPrueba() {
+    database.ref('prueba/').set({
+        mensaje: "Firebase está funcionando correctamente"
+    }).then(() => {
+        console.log("Datos de prueba escritos correctamente");
+    }).catch((error) => {
+        console.error("Error al escribir datos de prueba:", error);
+    });
+}
+
+// Leer datos de Firebase Realtime Database
+function leerDatosPrueba() {
+    const dbRef = database.ref('prueba/');
+    dbRef.get().then((snapshot) => {
+        if (snapshot.exists())
+            
 // Inicializar el formulario y tabla
 cambiarFormulario();
 inicializarParticipantes(); // Inicializar participantes al cargar la página
