@@ -6,6 +6,9 @@
     <title>Torneo de Truco - Grupo Casino</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- .Favicon link -->
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js"></script>
 </head>
 <body>
     <div class="container">
@@ -214,51 +217,6 @@
             </div>
         </div>
     </div>
- <!-- Scripts de Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
-    <script>
-        // Configuración de Firebase
-        const firebaseConfig = {
-            apiKey: "TU_API_KEY",
-            authDomain: "TU_AUTH_DOMAIN",
-            databaseURL: "TU_DATABASE_URL",
-            projectId: "TU_PROJECT_ID",
-            storageBucket: "TU_STORAGE_BUCKET",
-            messagingSenderId: "TU_MESSAGING_SENDER_ID",
-            appId: "TU_APP_ID"
-        };
-
-        // Inicializar Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.database(app);
-
-        // Funciones para interactuar con Firebase
-        function agregarJugador() {
-            const nuevoJugador = document.getElementById('nuevoJugador').value;
-            if (nuevoJugador) {
-                const jugadoresRef = db.ref('jugadores');
-                jugadoresRef.push(nuevoJugador);
-                document.getElementById('nuevoJugador').value = '';
-            }
-        }
-
-        function cargarJugadores() {
-            const listaJugadores = document.getElementById('listaJugadores');
-            const jugadoresRef = db.ref('jugadores');
-            jugadoresRef.on('value', (snapshot) => {
-                listaJugadores.innerHTML = '';
-                snapshot.forEach((childSnapshot) => {
-                    const jugador = childSnapshot.val();
-                    const li = document.createElement('li');
-                    li.textContent = jugador;
-                    listaJugadores.appendChild(li);
-                });
-            });
-        }
-
-        // Llamar a la función al cargar la página
-        window.onload = cargarJugadores;
-      <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
-</html>
+</html> 
