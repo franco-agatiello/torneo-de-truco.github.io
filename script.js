@@ -361,4 +361,4 @@ function limpiarCampos() {
 cambiarFormulario();
 inicializarParticipantes(); // Inicializar participantes al cargar la página
 actualizarTabla();
-actualizarTablaPartidas(); 
+actualizarTablaPartidas();
